@@ -4,31 +4,34 @@ setlocal
 REM === Arduino Libraries Folder ===
 set "LIB_DIR=%USERPROFILE%\Documents\Arduino\libraries"
 
-REM === Create Libraries Folder if it Doesn't Exist ===
+REM === Create Arduino libraries folder if it doesn't exist ===
 if not exist "%LIB_DIR%" (
-    echo Arduino libraries folder not found. Creating...
+    echo Creating Arduino libraries folder...
     mkdir "%LIB_DIR%"
 )
 
-REM === Source Folder is Where This .bat is Located ===
-set "SRC=%~dp0"
+REM === Source folder is /libraries in this repo ===
+set "SRC=%~dp0libraries"
 
-echo Installing all libraries from: %SRC%
-echo Target folder: %LIB_DIR%
+if not exist "%SRC%" (
+    echo ERROR: 'libraries' folder not found in this repo.
+    pause
+    exit /b 1
+)
 
-REM === Loop Through Each Subfolder (Library) ===
-for /D %%L in ("%SRC%*") do (
+echo Installing libraries from: %SRC%
+echo Target: %LIB_DIR%
+
+REM === Loop through each subfolder in libraries ===
+for /D %%L in ("%SRC%\*") do (
     set "FOLDERNAME=%%~nxL"
-    REM Skip if this is the batch file directory itself (like .git or other extras)
-    if not "%%~nxL"=="install_libs.bat" (
-        echo.
-        echo Installing library: %%~nxL
-        if exist "%LIB_DIR%\%%~nxL" (
-            echo Removing old version...
-            rmdir /s /q "%LIB_DIR%\%%~nxL"
-        )
-        xcopy "%%L" "%LIB_DIR%\%%~nxL" /E /I /Y >nul
+    echo.
+    echo Installing %%~nxL ...
+    if exist "%LIB_DIR%\%%~nxL" (
+        echo Removing old version...
+        rmdir /s /q "%LIB_DIR%\%%~nxL"
     )
+    xcopy "%%L" "%LIB_DIR%\%%~nxL" /E /I /Y >nul
 )
 
 echo.
