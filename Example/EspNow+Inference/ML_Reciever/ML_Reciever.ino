@@ -12,6 +12,7 @@ using namespace Eloquent::TF;
 #define NUMBER_OF_OUTPUTS 8
 #define TENSOR_ARENA_SIZE (20 * 1024)
 
+
 const float feature_mean[NUMBER_OF_INPUTS] = {
   19.30619797, 19.19131501, 19.34629111, 17.87492385,
   19.85021848, 22.18717688, 22.72578444, 22.29774153
@@ -140,7 +141,7 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *data, int len) {
     return;
   }
 
-  memcpy(&msg, data, sizeof(msg));
+  mmcpy(&msg, data, sizeof(msg));
   Serial.println("Data received. Running inference...");
   runInference(msg.input_data);
 }

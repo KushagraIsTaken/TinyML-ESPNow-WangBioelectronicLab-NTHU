@@ -50,7 +50,6 @@ void sendData() {
 void setup() {
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
-  WiFi.disconnect();
 
   if (esp_now_init() != ESP_OK) {
     Serial.println("ESP-NOW init failed");
